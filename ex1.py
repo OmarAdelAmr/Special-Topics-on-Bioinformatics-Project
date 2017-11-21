@@ -17,7 +17,7 @@ def scan_directory(directory):
     return found_files
 
 
-directory1 = "~/Desktop/Special-Topics-on-Bioinformatics-Project/Test Folder"
+directory1 = "~/Desktop/Special-Topics-on-Bioinformatics-Project/"
 directory2 = "/Users/omaramr/Desktop/Special-Topics-on-Bioinformatics-Project/Test Folder"
 
-file_names_list = scan_directory(directory2)
+file_names_list = scan_directory(directory1)
