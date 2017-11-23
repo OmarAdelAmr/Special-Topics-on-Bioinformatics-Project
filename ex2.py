@@ -1,10 +1,3 @@
-# TODO: Understand exactly when each Error should be raised
-# TODO: Value error not done yet
-# If no lines where all desired values exist can be found, your function
-# should raise a ValueError.
-
-
-# TODO: Is order important?
 def validate_header(separated_lines):
     try:
         header_start_index = separated_lines.index("# Header Start")
@@ -37,11 +30,14 @@ def get_columns_data(separated_lines):
 
     data_end_index = separated_lines[data_start_index:].index("# Data end") + data_start_index
     columns_data = separated_lines[data_start_index + 1: data_end_index]
+
+    if len(columns_data) == 0:
+        raise ValueError("No values exist") from None
+
     split_columns_data = []
     for x in columns_data:
         split_columns_data.append(x.split())
 
-    print(type(split_columns_data))
     return split_columns_data
 
 
@@ -52,6 +48,7 @@ def get_columns_names(separated_lines):
         for x in y:
             column_string = x.replace("# Columns:", "")
             column_names = column_string.lower().split()
+
     return column_names
 
 
@@ -68,8 +65,8 @@ def get_experiment_number(separated_lines):
 def read_file_content(file_name, columns_list):
     file_content = open(file_name, 'r').read()
     separated_lines = file_content.splitlines()
-    # TODO: replace condition with any number of spaces
-    separated_lines = [x for x in separated_lines if x != ""]
+    separated_lines = [x for x in separated_lines if x.strip() != ""]
+    print(separated_lines)
 
     try:
         separated_lines = separated_lines[:separated_lines.index("# Data end") + 1]
@@ -84,7 +81,15 @@ def read_file_content(file_name, columns_list):
     for column in columns_list:
         column_lower = column.lower()
         try:
-            values[column] = [item[column_names.index(column_lower)] for item in column_values]
+            all_values = [item[column_names.index(column_lower)] for item in column_values]
+            double_values_only = []
+            for value in all_values:
+                try:
+                    double_values_only.append(float(value))
+                except ValueError:
+                    pass
+
+            values[column] = double_values_only
         except ValueError:
             raise AttributeError("Column '" + column + "' is not defined") from None
 
@@ -96,8 +101,6 @@ def read_file_content(file_name, columns_list):
     return experiment_number, values
 
 
-# read_file_content("Test Folder/test5.exp1.data", ['index', 'height', 'age'])
-read_file_content("correct.exp1.data", ['HEIGHT', 'NoRm'])
+read_file_content("Test Folder/test5.exp1.data", ['index', 'height', 'description'])
+# read_file_content("correct.exp1.data", ['age', 'description'])
 # print(read_file_content("example_file.exp1.data", ['Index', 'height', 'AG']))
-
-# TODO: Errors and Convert values to double
