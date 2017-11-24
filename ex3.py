@@ -1,8 +1,8 @@
 import sys
-import pathlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+import pathlib
 
 from ex1 import scan_directory
 from ex2 import read_file_content
