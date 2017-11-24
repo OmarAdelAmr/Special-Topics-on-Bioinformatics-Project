@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import pathlib
-
 from ex1 import scan_directory
 from ex2 import read_file_content
+
 
 arg = sys.argv[1]
 
@@ -49,7 +49,8 @@ def read_all_files(directory=arg):
     plt.title("Average age")
     plt.savefig(output_directory + "/average_age.png")
 
-    heights = np.asarray(heights, dtype=np.float32)
+    # TODO: Originally float32, waiting for answer to see if should be changed.
+    heights = np.asarray(heights, dtype=np.float64)
     pickle.dump(heights, open(output_directory + "/heights.pkl", "wb"))
 
     print("\nEx 3 is done!")
