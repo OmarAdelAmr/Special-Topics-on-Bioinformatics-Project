@@ -9,15 +9,16 @@ def scan_directory(directory):
         for file in folder[2]:
             if file.endswith(".exp1.data"):
                 file_full_path = folder[0] + "/" + file
-                print(file_full_path)
                 found_files.append(file_full_path)
                 files_counter += 1
 
-    print("\nNumber of files: " + str(files_counter))
     return found_files
 
 
-directory1 = "~/Desktop/Special-Topics-on-Bioinformatics-Project/"
-directory2 = "/Users/omaramr/Desktop/Special-Topics-on-Bioinformatics-Project/Test Folder"
+if __name__ == "__main__":
+    directory = "/Users/omaramr/Desktop/Special-Topics-on-Bioinformatics-Project"
 
-file_names_list = scan_directory(directory1)
+    file_names_list = scan_directory(directory)
+    for file in file_names_list:
+        print(file)
+    print("\nNumber of files: {}".format(len(file_names_list)))

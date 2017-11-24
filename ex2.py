@@ -66,7 +66,6 @@ def read_file_content(file_name, columns_list):
     file_content = open(file_name, 'r').read()
     separated_lines = file_content.splitlines()
     separated_lines = [x for x in separated_lines if x.strip() != ""]
-    print(separated_lines)
 
     try:
         separated_lines = separated_lines[:separated_lines.index("# Data end") + 1]
@@ -93,14 +92,15 @@ def read_file_content(file_name, columns_list):
         except ValueError:
             raise AttributeError("Column '" + column + "' is not defined") from None
 
-    print("\n" + "Experiment number:", experiment_number + "\n")
-
-    for x in values:
-        print(x, "values:", values[x])
-
     return experiment_number, values
 
 
-read_file_content("Test Folder/test5.exp1.data", ['index', 'height', 'description'])
-# read_file_content("correct.exp1.data", ['age', 'description'])
-# print(read_file_content("example_file.exp1.data", ['Index', 'height', 'AG']))
+if __name__ == "__main__":
+    directory = "correct.exp1.data" # "correct.exp1.data"
+    required_columns = ['index', 'height', 'description'] # ['age', 'description']
+    result = read_file_content(directory, required_columns)
+    print("Experiment Number:{} \n".format(result[0]))
+
+    for column in result[1]:
+        print(column, "values:", result[1][column])
+
