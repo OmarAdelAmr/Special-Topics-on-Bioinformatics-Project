@@ -17,7 +17,6 @@ def shell_script(directory=arg1):
     heights = pickle.load(open(output_directory + "heights.pkl", "rb"))
 
     bin_upper_bound = math.ceil(np.amax(heights)) + 1
-    print(bin_upper_bound)
     n_bins = range(0, bin_upper_bound)
 
     arr = plt.hist(heights, n_bins, histtype='bar', edgecolor='white', color="red")
@@ -29,7 +28,7 @@ def shell_script(directory=arg1):
     plt.title("Heights")
     plt.savefig(output_directory + "/heights.png")
 
-    print("\nEx 4 is Done")
+    print("\nEx 4 is done!")
 
 
 if __name__ == "__main__":

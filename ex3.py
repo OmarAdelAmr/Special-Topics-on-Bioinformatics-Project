@@ -19,6 +19,7 @@ def read_all_files(directory=arg):
 
     values = {}  # (Exp No.): [mean age]
     heights = []
+    print("\n")
     for file in files:
         try:
             file_output = read_file_content(file, ["age", "height"])
@@ -40,6 +41,7 @@ def read_all_files(directory=arg):
     values = dict(sorted(values.items()))  # sort dictionary by experiment number
     pathlib.Path(output_directory).mkdir(parents=True, exist_ok=True)
 
+    # TODO: Handle if experiment number does not exist. e.g. # Experiment: <Non numeric value>
     experiment_numbers = list(map(int, list(values.keys())))
     experiment_age_means = list(values.values())
 
