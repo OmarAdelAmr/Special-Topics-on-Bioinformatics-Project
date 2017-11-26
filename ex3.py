@@ -45,7 +45,11 @@ def read_all_files(directory=arg):
     experiment_numbers = list(map(int, list(values.keys())))
     experiment_age_means = list(values.values())
 
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.set_xticks(experiment_numbers)
     plt.plot(experiment_numbers, experiment_age_means)
+
     plt.xlabel("Experiment")
     plt.ylabel("Age")
     plt.title("Average age")
