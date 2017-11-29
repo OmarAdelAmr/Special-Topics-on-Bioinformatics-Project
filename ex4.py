@@ -7,6 +7,8 @@ from subprocess import call
 
 arg1 = sys.argv[1]
 
+# TODO: Revision Still Needed, Specially Plots
+
 
 def shell_script(directory=arg1):
     call(["python3", "ex3.py", directory])
