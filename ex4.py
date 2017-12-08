@@ -3,14 +3,17 @@ import math
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
+
 from subprocess import call
 
 arg1 = sys.argv[1]
 
-# TODO: Revision Still Needed, Specially Plots
 
+# TODO: Revision Still Needed, Specially Plots.
+# TODO: Revision, where the output directory should be.
 
 def shell_script(directory=arg1):
+    directory = directory.rstrip('/')
     call(["python3", "ex3.py", directory])
 
     output_directory = directory + "_processed/"

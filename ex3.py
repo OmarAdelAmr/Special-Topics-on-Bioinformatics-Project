@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import pathlib
+
 from ex1 import scan_directory
 from ex2 import read_file_content
-
 
 arg = sys.argv[1]
 
 
 def read_all_files(directory=arg):
+    directory = directory.rstrip('/')
     files = scan_directory(directory)
 
     if len(files) == 0:
@@ -25,11 +26,13 @@ def read_all_files(directory=arg):
             file_output = read_file_content(file, ["age", "height"])
             experiment_number = file_output[0]
             columns_values = file_output[1]
+            print(sum(columns_values["age"]) / len(columns_values["age"]))
             age_mean = sum(columns_values["age"]) * 1.0 / len(columns_values["age"])
             heights += (columns_values["height"])
 
             if experiment_number in values:
                 values[experiment_number] = (values[experiment_number] + age_mean) / 2
+                print(experiment_number)
             else:
                 values[experiment_number] = age_mean
 
@@ -45,10 +48,17 @@ def read_all_files(directory=arg):
     experiment_numbers = list(map(int, list(values.keys())))
     experiment_age_means = list(values.values())
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(7, 7))
     ax = fig.add_subplot(111)
     ax.set_xticks(experiment_numbers)
     plt.plot(experiment_numbers, experiment_age_means)
+    plt.tight_layout(pad=2)
+    plt.margins(0.1, 0.12)
+
+    for i in values:
+        x = int(i)
+        y = float("{0:.2f}".format(values[i]))
+        plt.annotate(y, xy=(x, y), xytext=(x, y + 1.5), arrowprops=dict(arrowstyle="-|>", color='red'))
 
     plt.xlabel("Experiment")
     plt.ylabel("Age")

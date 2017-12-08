@@ -96,11 +96,10 @@ def read_file_content(file_name, columns_list):
 
 
 if __name__ == "__main__":
-    directory = "correct.exp1.data" # "correct.exp1.data"
-    required_columns = ['index', 'height', 'description'] # ['age', 'description']
+    directory = "correct.exp1.data"  # "correct.exp1.data"
+    required_columns = ['index', 'height', 'description']  # ['age', 'description']
     result = read_file_content(directory, required_columns)
-    print("Experiment Number:{} \n".format(result[0]))
+    print("\nExperiment Number:{} \n".format(result[0]))
 
-    for column in result[1]:
-        print(column, "values:", result[1][column])
-
+    for column_value in result[1]:
+        print(column_value, ":", result[1][column_value])

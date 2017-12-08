@@ -16,9 +16,9 @@ def scan_directory(directory):
 
 
 if __name__ == "__main__":
-    directory = "/Users/omaramr/Desktop/Special-Topics-on-Bioinformatics-Project"
+    input_directory = "/Users/omaramr/Desktop/Special-Topics-on-Bioinformatics-Project"
+    file_names_list = scan_directory(input_directory)
 
-    file_names_list = scan_directory(directory)
-    for file in file_names_list:
-        print(file)
+    for file_name in file_names_list:
+        print(file_name)
     print("\nNumber of files: {}".format(len(file_names_list)))
