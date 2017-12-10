@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""ex1.py
+Author: Omar Amr
+Matr.Nr.: K11776960
+Exercise 1
+"""
+
 import os
 
 

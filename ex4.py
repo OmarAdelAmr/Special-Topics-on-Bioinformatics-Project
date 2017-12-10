@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""ex4.py
+Author: Omar Amr
+Matr.Nr.: K11776960
+Exercise 4
+"""
+
 import sys
 import math
 import pickle

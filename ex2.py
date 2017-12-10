@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+"""ex2.py
+Author: Omar Amr
+Matr.Nr.: K11776960
+Exercise 2
+"""
+import numpy as np
+
+
 def validate_header(separated_lines):
     try:
         header_start_index = separated_lines.index("# Header Start")
@@ -22,11 +31,11 @@ def validate_header(separated_lines):
         raise AttributeError("Header not valid, 'Data start' not found") from None
 
 
-def get_columns_data(separated_lines):
+def get_required_columns_data(separated_lines, columns_indices, columns_names):
     try:
         data_start_index = separated_lines.index("# Data start")
     except ValueError:
-        raise AttributeError("TODO: file ends before any data is presented") from None
+        raise AttributeError("TODO: file ends before any data is presented") from None  # TODO
 
     data_end_index = separated_lines[data_start_index:].index("# Data end") + data_start_index
     columns_data = separated_lines[data_start_index + 1: data_end_index]
@@ -34,14 +43,27 @@ def get_columns_data(separated_lines):
     if len(columns_data) == 0:
         raise ValueError("No values exist") from None
 
-    split_columns_data = []
-    for x in columns_data:
-        split_columns_data.append(x.split())
+    columns_data = [x.split() for x in columns_data]
+    float_columns_data = []
 
-    return split_columns_data
+    for row in columns_data:
+        try:
+            float_columns_data.append([float(x) for x in np.array(row)[columns_indices]])
+        except IndexError:
+            # TODO: ADD the column with missing value
+            raise AttributeError("Column '{}' has a missing value in 'TODO' file.") from None
+        except ValueError:
+            pass
+
+    result_dict = {}
+
+    for i in range(len(columns_names)):
+        result_dict[columns_names[i]] = [item[i] for item in float_columns_data]
+
+    return result_dict
 
 
-def get_columns_names(separated_lines):
+def get_all_columns_names(separated_lines):
     y = [x for x in separated_lines if x.startswith("# Columns")]
     column_names = []
     if len(y) != 0:
@@ -73,31 +95,22 @@ def read_file_content(file_name, columns_list):
         raise AttributeError("'# Data end' was not found") from None
 
     validate_header(separated_lines)
-    column_names = get_columns_names(separated_lines)
-    column_values = get_columns_data(separated_lines)
-    experiment_number = get_experiment_number(separated_lines)
-    values = {}
-    for column in columns_list:
-        column_lower = column.lower()
-        try:
-            all_values = [item[column_names.index(column_lower)] for item in column_values]
-            double_values_only = []
-            for value in all_values:
-                try:
-                    double_values_only.append(float(value))
-                except ValueError:
-                    pass
+    column_names = get_all_columns_names(separated_lines)
+    try:
+        required_columns_indices = [column_names.index(x.lower()) for x in
+                                    columns_list]  # TODO: case sensitivity not handled
+    except ValueError:
+        raise AttributeError("Input Column Not Defined") from None  # TODO: Add which column causes error
 
-            values[column] = double_values_only
-        except ValueError:
-            raise AttributeError("Column '" + column + "' is not defined") from None
+    values = get_required_columns_data(separated_lines, required_columns_indices, columns_list)
+    experiment_number = get_experiment_number(separated_lines)
 
     return experiment_number, values
 
 
 if __name__ == "__main__":
     directory = "correct.exp1.data"  # "correct.exp1.data"
-    required_columns = ['index', 'height', 'description']  # ['age', 'description']
+    required_columns = ['INDEX', 'heiGht', 'descriptioN']
     result = read_file_content(directory, required_columns)
     print("\nExperiment Number:{} \n".format(result[0]))
 

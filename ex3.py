@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""ex3.py
+Author: Omar Amr
+Matr.Nr.: K11776960
+Exercise 3
+"""
+
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,13 +33,11 @@ def read_all_files(directory=arg):
             file_output = read_file_content(file, ["age", "height"])
             experiment_number = file_output[0]
             columns_values = file_output[1]
-            print(sum(columns_values["age"]) / len(columns_values["age"]))
             age_mean = sum(columns_values["age"]) * 1.0 / len(columns_values["age"])
             heights += (columns_values["height"])
 
             if experiment_number in values:
                 values[experiment_number] = (values[experiment_number] + age_mean) / 2
-                print(experiment_number)
             else:
                 values[experiment_number] = age_mean
 
