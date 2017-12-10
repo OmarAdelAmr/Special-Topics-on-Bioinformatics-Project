@@ -4,6 +4,7 @@ Author: Omar Amr
 Matr.Nr.: K11776960
 Exercise 2
 """
+
 import numpy as np
 
 
@@ -35,7 +36,7 @@ def get_required_columns_data(separated_lines, columns_indices, columns_names):
     try:
         data_start_index = separated_lines.index("# Data start")
     except ValueError:
-        raise AttributeError("TODO: file ends before any data is presented") from None  # TODO
+        raise AttributeError("'# Data end' is triggered before any data is presented") from None
 
     data_end_index = separated_lines[data_start_index:].index("# Data end") + data_start_index
     columns_data = separated_lines[data_start_index + 1: data_end_index]
@@ -50,8 +51,7 @@ def get_required_columns_data(separated_lines, columns_indices, columns_names):
         try:
             float_columns_data.append([float(x) for x in np.array(row)[columns_indices]])
         except IndexError:
-            # TODO: ADD the column with missing value
-            raise AttributeError("Column '{}' has a missing value in 'TODO' file.") from None
+            raise AttributeError("Some columns have missing values in input data file.") from None
         except ValueError:
             pass
 
@@ -76,10 +76,20 @@ def get_all_columns_names(separated_lines):
 
 def get_experiment_number(separated_lines):
     y = [x for x in separated_lines if x.startswith("# Experiment")]
-    experiment_number = 0
+    experiment_number = ""
     if len(y) != 0:
         for x in y:
             experiment_number = x.replace("# Experiment:", "")
+
+    try:
+        experiment_number = int(experiment_number)
+    except ValueError:
+        error_message = "Header not valid, "
+        if str(experiment_number).strip() == "":
+            error_message += "Experiment Number not found"
+        else:
+            error_message += "Invalid Experiment Number format. Non numeric value"
+        raise AttributeError(error_message) from None
 
     return experiment_number
 
@@ -97,8 +107,7 @@ def read_file_content(file_name, columns_list):
     validate_header(separated_lines)
     column_names = get_all_columns_names(separated_lines)
     try:
-        required_columns_indices = [column_names.index(x.lower()) for x in
-                                    columns_list]  # TODO: case sensitivity not handled
+        required_columns_indices = [column_names.index(x.lower()) for x in columns_list]
     except ValueError:
         raise AttributeError("Input Column Not Defined") from None  # TODO: Add which column causes error
 
@@ -112,7 +121,7 @@ if __name__ == "__main__":
     directory = "correct.exp1.data"  # "correct.exp1.data"
     required_columns = ['INDEX', 'heiGht', 'descriptioN']
     result = read_file_content(directory, required_columns)
-    print("\nExperiment Number:{} \n".format(result[0]))
+    print("\nExperiment Number: {} \n".format(result[0]))
 
     for column_value in result[1]:
         print(column_value, ":", result[1][column_value])

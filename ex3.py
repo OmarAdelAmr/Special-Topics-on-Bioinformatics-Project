@@ -49,7 +49,6 @@ def read_all_files(directory=arg):
     values = dict(sorted(values.items()))  # sort dictionary by experiment number
     pathlib.Path(output_directory).mkdir(parents=True, exist_ok=True)
 
-    # TODO: Handle if experiment number does not exist. e.g. # Experiment: <Non numeric value>
     experiment_numbers = list(map(int, list(values.keys())))
     experiment_age_means = list(values.values())
 
@@ -70,8 +69,10 @@ def read_all_files(directory=arg):
     plt.title("Average age")
     plt.savefig(output_directory + "/average_age.png")
 
-    # TODO: Originally float32, waiting for answer to see if should be changed.
+    # TODO: Add Comment that value changes in the documentation 55.4 -> 55.40000153 etc
+    print(heights)
     heights = np.asarray(heights, dtype=np.float64)
+    print(heights)
     pickle.dump(heights, open(output_directory + "/heights.pkl", "wb"))
 
     print("\nEx 3 is done!")
