@@ -10,7 +10,6 @@ import math
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
-
 from subprocess import call
 
 arg1 = sys.argv[1]  # input from the command line.

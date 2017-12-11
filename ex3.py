@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import pathlib
-
 from ex1 import scan_directory
 from ex2 import read_file_content
 
@@ -78,9 +77,9 @@ def read_all_files(directory=arg):
     plt.title("Average age")  # setting the title of the graph.
     plt.savefig(output_directory + "/average_age.png")  # save the graph as png image in the output directory.
 
-    #  flaot32 was supposed to be used, however it changes the values of the original heights array after conversion.
+    # flaot32 was supposed to be used, however it changes the values of the original heights array after conversion.
     # So float64 was used instead to maintain the same values as the original array.
-    heights = np.asarray(heights, dtype=np.float64)  # convert the list of heights to np array.
+    heights = np.asarray(heights, dtype=np.float64)  # convert the list of heights to numpy array.
 
     # write the heights numpy array to the output directory
     pickle.dump(heights, open(output_directory + "/heights.pkl", "wb"))
