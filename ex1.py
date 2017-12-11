@@ -9,15 +9,15 @@ import os
 
 
 def scan_directory(directory):
-    files_counter = 0
-    found_files = []
+    found_files = []  # a list that stores the paths of files with .exp1.data extension.
 
+    # detects all folders in specified directory including base level (the directory itself).
     for folder in os.walk(os.path.abspath(os.path.expanduser(directory))):
-        for file in folder[2]:
+        for file in folder[2]:  # loop through all files in a specific folder.
             if file.endswith(".exp1.data"):
+                # if the current file has .exp1.data extension, store its path in the list of found_files defined above.
                 file_full_path = folder[0] + "/" + file
                 found_files.append(file_full_path)
-                files_counter += 1
 
     return found_files
 

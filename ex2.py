@@ -8,13 +8,17 @@ Exercise 2
 import numpy as np
 
 
+# This function makes sure that the header is valid and has no missing values.
 def validate_header(separated_lines):
     try:
+        # find the position of '# Header Start' line, and find the 4 lines that form a valid header.
         header_start_index = separated_lines.index("# Header Start")
         separated_lines = separated_lines[header_start_index + 1:header_start_index + 4]
     except ValueError:
+        # raise exception if header start not found in the file.
         raise AttributeError("Header not valid, '# Header Start' not found") from None
 
+    # check if any header value is missing and custmize the error message based in that.
     validation_check_array = [False, False, False]
     for x in separated_lines:
         if x.startswith("# Experiment:"):
@@ -24,6 +28,7 @@ def validate_header(separated_lines):
         elif x == "# Data start":
             validation_check_array[2] = True
 
+    # raise excpetion with custoized error message to define what is exactly wrong with the header.
     if not validation_check_array[0]:
         raise AttributeError("Header not valid, 'Experiment Number' not found") from None
     elif not validation_check_array[1]:
@@ -32,6 +37,7 @@ def validate_header(separated_lines):
         raise AttributeError("Header not valid, 'Data start' not found") from None
 
 
+# fet the data of required columns, and assure that only float values are returned.
 def get_required_columns_data(separated_lines, columns_indices, columns_names):
     try:
         data_start_index = separated_lines.index("# Data start")
@@ -95,30 +101,35 @@ def get_experiment_number(separated_lines):
 
 
 def read_file_content(file_name, columns_list):
-    file_content = open(file_name, 'r').read()
-    separated_lines = file_content.splitlines()
-    separated_lines = [x for x in separated_lines if x.strip() != ""]
+    file_content = open(file_name, 'r').read()  # open the input file.
+    separated_lines = file_content.splitlines()  # separate the file's content to list of lines.
+    separated_lines = [x for x in separated_lines if x.strip() != ""]  # ignore empty lines(including whitespace lines).
 
     try:
+        # ignore any lines that come after "# Data end" line, and raise an error if the line was never found.
         separated_lines = separated_lines[:separated_lines.index("# Data end") + 1]
     except ValueError:
         raise AttributeError("'# Data end' was not found") from None
 
-    validate_header(separated_lines)
-    column_names = get_all_columns_names(separated_lines)
+    validate_header(separated_lines)  # make sure the header is valid.
+    column_names = get_all_columns_names(separated_lines)  # get all columns names in the input file.
     try:
+        # get the corresponding index for each column in the input with respect to its location in the file.
+        # know the position of each column.
         required_columns_indices = [column_names.index(x.lower()) for x in columns_list]
     except ValueError:
+        # if the list of input columns has a column name that does not exist in the file, an exception is raised.
         raise AttributeError("Input Column Not Defined") from None  # TODO: Add which column causes error
 
+    # create a dictionary with column names as keys and the returned corresponding values as values of the dictionary.
     values = get_required_columns_data(separated_lines, required_columns_indices, columns_list)
-    experiment_number = get_experiment_number(separated_lines)
+    experiment_number = get_experiment_number(separated_lines)  # get the experiment number of the input file.
 
     return experiment_number, values
 
 
 if __name__ == "__main__":
-    directory = "correct.exp1.data"  # "correct.exp1.data"
+    directory = "correct.exp1.data"
     required_columns = ['INDEX', 'heiGht', 'descriptioN']
     result = read_file_content(directory, required_columns)
     print("\nExperiment Number: {} \n".format(result[0]))
