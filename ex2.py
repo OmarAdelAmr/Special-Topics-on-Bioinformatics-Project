@@ -17,10 +17,7 @@ def validate_header(separated_lines):
         separated_lines = separated_lines[header_start_index + 1:header_start_index + 4]
     except ValueError:
         # raise exception if header start not found in the file.
-        if separated_lines.__contains__("# Data end"):
-            raise AttributeError("'# Data end' is triggered before header.") from None
-        else:
-            raise AttributeError("Header not valid, '# Header Start' not found") from None
+        raise AttributeError("Header not valid, '# Header Start' not found or data ends before header.") from None
 
     # check if any header value is missing and show a customized error message based in that.
     validation_check_array = [False, False, False]
@@ -29,7 +26,7 @@ def validate_header(separated_lines):
     for x in separated_lines:
         if x.startswith("# Experiment:"):
             validation_check_array[0] = True
-            experiment_number = x.replace("# Experiment:", "")
+            experiment_number = x.replace("# Experiment:", "").strip()
         elif x.startswith("# Columns:"):
             validation_check_array[1] = True
             columns_names = (x.replace("# Columns:", "")).lower().split()
@@ -84,6 +81,8 @@ def get_required_columns_data(separated_lines, columns_indices, columns_names):
     return result_dict
 
 
+# This function takes the input file name and the required columns and calls helper methods defined above.
+# It returns the experiment number and a dictionary with desired values.
 def read_file_content(file, columns_list):
     file_content = open(file, 'r').read()  # open the input file.
     separated_lines = file_content.splitlines()  # separate the file's content to list of lines.
@@ -93,18 +92,22 @@ def read_file_content(file, columns_list):
         # ignore any lines that come after "# Data end" line, and raise an error if the line was never found.
         separated_lines = separated_lines[:separated_lines.index("# Data end") + 1]
     except ValueError:
-        raise AttributeError("'# Data end' was not found") from None
+        raise AttributeError("'# Data end' not found.") from None
 
     header_values = validate_header(separated_lines)  # make sure the header is valid.
     experiment_number = header_values[0]  # get the experiment number of the input file.
     column_names = header_values[1]  # get all columns names in the input file.
+
+    if len(column_names) == 0:  # raise error if inout file has no column names.
+        raise AttributeError("No columns found in input file.") from None
+
     try:
         # get the corresponding index for each column in the input with respect to its location in the file.
         # know the position of each column.
         required_columns_indices = [column_names.index(x.lower()) for x in columns_list]
     except ValueError:
         # if the list of input columns has a column name that does not exist in the file, an exception is raised.
-        raise AttributeError("Input Column Not Defined") from None  # TODO: Add which column causes error
+        raise AttributeError("Entered column/s not defined, check input column names") from None
 
     # create a dictionary with column names as keys and the returned values from the file as values of the dictionary.
     values = get_required_columns_data(separated_lines, required_columns_indices, columns_list)
@@ -116,7 +119,8 @@ if __name__ == "__main__":
     file_name = "correct.exp1.data"
     required_columns = ['INDEX', 'heiGht', 'descriptioN']
     result = read_file_content(file_name, required_columns)
+
     print("\nExperiment Number: {} \n".format(result[0]))
 
-    for column_value in result[1]:
+    for column_value in result[1]:  # loop through dictionary to print each key with its corresponding values.
         print(column_value, ":", result[1][column_value])

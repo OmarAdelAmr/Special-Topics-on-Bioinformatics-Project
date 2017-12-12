@@ -18,7 +18,7 @@ arg = sys.argv[1]  # input from the command line.
 
 def read_all_files(directory=arg):
     directory = directory.rstrip('/')
-    files = scan_directory(directory)  # get the list of files with .exp1.data extension using ex1 functions.
+    files = scan_directory(directory)  # get the list of files with .exp1.data extension using ex1.py functions.
 
     if len(files) == 0:
         print("No files found!")
@@ -31,7 +31,7 @@ def read_all_files(directory=arg):
     # loop through all the detected files to extract the required data.
     for file in files:
         try:
-            # get age and height values from the file using ex2 functions
+            # get age and height values from the file using ex2.py functions
             file_output = read_file_content(file, ["age", "height"])
             experiment_number = file_output[0]
             columns_values = file_output[1]

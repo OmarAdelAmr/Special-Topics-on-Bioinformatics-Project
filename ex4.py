@@ -17,7 +17,7 @@ arg1 = sys.argv[1]  # input from the command line.
 
 def shell_script(directory=arg1):
     directory = directory.rstrip('/')
-    call(["python3", "ex3.py", directory])
+    call(["python3", "ex3.py", directory])  # Call ex3.py using the same command when calling it from the terminal.
 
     output_directory = directory + "_processed/"  # define the output directory path.
 
